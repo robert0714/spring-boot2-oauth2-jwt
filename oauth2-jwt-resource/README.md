@@ -20,7 +20,7 @@ in which can be a document a photo or something else, in our case it will be a R
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>2.1.2.RELEASE</version>
+            <version>2.1.9.RELEASE</version>
         </dependency>
 
         <dependency>

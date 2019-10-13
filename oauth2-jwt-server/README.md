@@ -63,7 +63,7 @@ You can go to [start.spring.io](https://start.spring.io/) and generate a new pro
         <dependency>
             <groupId>org.springframework.security.oauth.boot</groupId>
             <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>2.1.2.RELEASE</version>
+            <version>2.1.9.RELEASE</version>
         </dependency>
 
         <dependency>
