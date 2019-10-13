@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 
 import javax.sql.DataSource;
 
@@ -18,6 +19,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private PasswordEncoder passwordEncoder;
     private UserDetailsService userDetailsService;
+    
+    private ActiveDirectoryLdapAuthenticationProvider adProvider;
 
     public WebSecurityConfiguration(final DataSource dataSource) {
         this.dataSource = dataSource;
@@ -27,6 +30,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService())
                 .passwordEncoder(passwordEncoder());
+        //for test ad server
+//        auth.authenticationProvider(adProvider);
     }
 
     @Bean
@@ -52,5 +57,18 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         }
         return userDetailsService;
     }
+    
+    /***
+     * for test ad server 
+     * */
+   // @Bean
+	public ActiveDirectoryLdapAuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
+    	adProvider = new ActiveDirectoryLdapAuthenticationProvider("iead.local",
+				"ldap://192.168.2.12:389", "dc=iead,dc=local");
+    	adProvider.setSearchFilter("(&(objectClass=user)(sAMAccountName={1}))");
+    	adProvider.setConvertSubErrorCodesToExceptions(true);
+    	adProvider.setUseAuthenticationRequestCredentials(true);
+		return adProvider;
+	}
 
 }
