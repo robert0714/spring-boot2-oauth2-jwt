@@ -1,19 +1,18 @@
 package com.marcosbarbero.lab.sec.oauth.jwt.ds;
-
-import static org.junit.Assert.assertTrue;
+ 
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.Map;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.util.Map; 
+import org.junit.jupiter.api.Assertions;
+import static  org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,14 +25,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension; 
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 //Before running this test make sure authorization server is running   
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ResourceServerJwtApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AuthenticationClaimsIntegrationTest {
 	private RestTemplate restTemplate;
@@ -51,7 +50,7 @@ public class AuthenticationClaimsIntegrationTest {
 	@Autowired
 	private JwtTokenStore tokenStore;
 	
-	@Before
+	@BeforeEach
 	public void setup() {
 		restTemplate = new RestTemplate();
 	}
@@ -59,7 +58,7 @@ public class AuthenticationClaimsIntegrationTest {
 	@Test
 	public void whenTokenDontContainIssuer_thenSuccess() {
 		final String tokenValue = obtainAccessToken(CLIENT_ID, ACCOUNT_ID, ACCOUNT_PASWD);
-		Assert.assertNotNull(tokenValue);
+		Assertions.assertNotNull(tokenValue);
 
 		System.out.println("AccessToken:" + tokenValue);
 		final OAuth2Authentication auth = tokenStore.readAuthentication(tokenValue);
@@ -96,7 +95,7 @@ public class AuthenticationClaimsIntegrationTest {
 	}
 
 	@Test
-	@Ignore
+	@Disabled
 	public void givenInvalidRole_whenGetSecureRequest_thenForbidden() throws Exception {
 		final String accessToken = obtainAccessTokenByRestTemplate(ACCOUNT_ID, ACCOUNT_PASWD);
 		System.out.println("token:" + accessToken);

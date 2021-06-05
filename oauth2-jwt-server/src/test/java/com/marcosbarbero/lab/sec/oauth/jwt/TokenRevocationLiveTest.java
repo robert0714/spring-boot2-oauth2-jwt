@@ -1,13 +1,14 @@
 package com.marcosbarbero.lab.sec.oauth.jwt;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo; 
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static  org.junit.jupiter.api.Assertions.*;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
@@ -28,7 +29,7 @@ public class TokenRevocationLiveTest {
         assertNotNull(accessToken);
 
         final Response resourceServerResponse = RestAssured.given().header("Authorization", "Bearer " + accessToken).get("http://localhost:9100/me");
-        assertThat(resourceServerResponse.getStatusCode(), equalTo(200));
+        assertEquals(resourceServerResponse.getStatusCode(), 200);
     }
 
     //

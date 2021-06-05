@@ -68,3 +68,31 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   (ommit...)
 }
 ```
+# Testing all together
+
+##Generating the token
+
+```bash
+$ curl -u clientId:secret -X POST localhost:9000/oauth/token\?grant_type=password\&username=user\&password=pass
+
+```
+The response body is
+
+```json
+{
+  "access_token" : "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjI5MDg3MTQsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiZjkxYmYzODUtNmM1NC00ODFmLThkMjQtZDIyNzZmZDI4Y2I4IiwiY2xpZW50X2lkIjoiY2xpZW50SWQiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.czhuPctXBQ_t2iA9PYrLNd14ABgBzGCOnTtAh5TF0zEa-pea3tvwEIAEUeO3Du3RS0j_1CovT4whmPDeffN1dV4UMYgTvoOPhSvdpyhYJgTejpIGfBnH0mldGSLQFrA8zrp-dheFokdRZb7-6wyO9og0qIq_yOOTfz67tJLP-lc3_faWrEh5bGVreMYSS-dQ9C77U0w1EiHI_vcv7bAng6sz_EIkHErnN1sOir0mNnPDzCeSRO1BLj40bCP4NFfxoE0BMYUDG22QEiZ27XqjLUguEfNkNOcNDBtM8QF344419egpQ5556TN3GKVo623oXrdof4em97UdhHBApnv9jA",
+  "token_type" : "bearer",
+  "refresh_token" : "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ1c2VyIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImF0aSI6ImY5MWJmMzg1LTZjNTQtNDgxZi04ZDI0LWQyMjc2ZmQyOGNiOCIsImV4cCI6MTYyNTUwMDQxNCwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6Ijc1MDBkYWU2LTE0MDMtNGRmNS04YzFhLTAzZjE4N2U4MTRlYSIsImNsaWVudF9pZCI6ImNsaWVudElkIn0.VTdZHQf9XHfdB19oypg7x1jwv83Y4AvdUCpguEZ6WBjRxjTO7V_pUuHOaXX_Yr2ThMkjsu3xqxKgJBuDVAAYKQBCzZfPnqPY6bgv_uIyBiyC7jH-TgmfGMR7fW0IRKtf0E5-DXe0vNkon9lyep8jGKudJz9cWhYqNb_3n_BRyYjS31oIvOPQzpX2JCU6SkA_jVEsQ-ACWI5UtAvoYFv4p08LbKSHDWdVsj5ugCg3S4Vu30OcojGJd9yHNz-fx82YGykGQwND68ZsKTEBJIMVxmM40qpvPNjU7SptrWGik5dJFCaNJtYSAM1HyVYHwc8tEH7AIbZXr2kS-KcF08dpPQ",
+  "expires_in" : 299,
+  "scope" : "read write",
+  "jti" : "f91bf385-6c54-481f-8d24-d2276fd28cb8"
+}
+```
+
+## Accessing the resource
+Now that you have generated the token copy the access_token and add it to the request on the Authorization HTTP Header, e.g:
+
+```bash
+$ curl localhost:9100/me -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MjI5MDg3MTQsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiZjkxYmYzODUtNmM1NC00ODFmLThkMjQtZDIyNzZmZDI4Y2I4IiwiY2xpZW50X2lkIjoiY2xpZW50SWQiLCJzY29wZSI6WyJyZWFkIiwid3JpdGUiXX0.czhuPctXBQ_t2iA9PYrLNd14ABgBzGCOnTtAh5TF0zEa-pea3tvwEIAEUeO3Du3RS0j_1CovT4whmPDeffN1dV4UMYgTvoOPhSvdpyhYJgTejpIGfBnH0mldGSLQFrA8zrp-dheFokdRZb7-6wyO9og0qIq_yOOTfz67tJLP-lc3_faWrEh5bGVreMYSS-dQ9C77U0w1EiHI_vcv7bAng6sz_EIkHErnN1sOir0mNnPDzCeSRO1BLj40bCP4NFfxoE0BMYUDG22QEiZ27XqjLUguEfNkNOcNDBtM8QF344419egpQ5556TN3GKVo623oXrdof4em97UdhHBApnv9jA"
+
+```
